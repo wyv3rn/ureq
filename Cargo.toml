@@ -39,7 +39,7 @@ cookie_store = { version = "0.15", optional = true, default-features = false, fe
 log = "0.4"
 webpki = { version = "0.22", optional = true }
 webpki-roots = { version = "0.22", optional = true }
-rustls = { version = ">=0.20.1", optional = true }
+rustls = { version = "0.21", optional = true }
 rustls-native-certs = { version = "0.6", optional = true }
 native-tls = { git = "https://github.com/wyv3rn/rust-native-tls", branch = "psk-support", optional = true }
 flate2 = { version = "1.0.22", optional = true }
