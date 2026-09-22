@@ -778,8 +778,7 @@ dependencies = [
 [[package]]
 name = "native-tls"
 version = "0.2.18"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "465500e14ea162429d264d44189adc38b199b62b1c21eea9f69e4b73cb03bbf2"
+source = "git+https://github.com/wyv3rn/rust-native-tls?branch=psk-support#3782cc28805bdea958ded3fb16dcb6c3d3dc195d"
 dependencies = [
  "libc",
  "log",
@@ -787,6 +786,7 @@ dependencies = [
  "openssl-probe",
  "openssl-sys",
  "schannel",
+ "secstr",
  "security-framework",
  "security-framework-sys",
  "tempfile",
@@ -1116,6 +1116,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "secstr"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cce2c726741c320e5b8f1edd9a21b3c2c292ae94514afd001d41d81ba143dafc"
+dependencies = [
+ "libc",
+]
+
+[[package]]
 name = "security-framework"
 version = "3.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1396,6 +1405,7 @@ dependencies = [
  "rustls",
  "rustls-pki-types",
  "rustls-platform-verifier",
+ "secstr",
  "serde",
  "serde_json",
  "socks",

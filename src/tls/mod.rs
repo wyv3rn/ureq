@@ -7,6 +7,7 @@ use std::sync::Arc;
 
 mod cert;
 pub use cert::{Certificate, PemItem, PrivateKey, parse_pem};
+use secstr::SecStr;
 
 #[cfg(feature = "_rustls")]
 pub(crate) mod rustls;
@@ -73,6 +74,11 @@ pub struct TlsConfig {
     root_certs: RootCerts,
     use_sni: bool,
     disable_verification: bool,
+
+    // TODO make this a struct
+    psk: Option<SecStr>,
+    psk_identity: Option<String>,
+
     #[cfg(feature = "_rustls")]
     rustls_crypto_provider: Option<Arc<::rustls::crypto::CryptoProvider>>,
 }
@@ -87,6 +93,8 @@ impl TlsConfig {
             root_certs,
             use_sni,
             disable_verification,
+            psk: _psk,
+            psk_identity,
             #[cfg(feature = "_rustls")]
             rustls_crypto_provider,
         } = self;
@@ -116,6 +124,7 @@ impl TlsConfig {
             && same_roots
             && *use_sni == agent.use_sni
             && *disable_verification == agent.disable_verification
+            && *psk_identity == agent.psk_identity
     }
 
     /// Builder to make a bespoke config.
@@ -238,6 +247,13 @@ impl TlsConfigBuilder {
     /// any level of security is required.
     pub fn disable_verification(mut self, v: bool) -> Self {
         self.config.disable_verification = v;
+        self
+    }
+
+    /// Pass down PSK + identity to native-tls
+    pub fn native_tls_psk(mut self, psk: SecStr, psk_identity: String) -> Self {
+        self.config.psk = Some(psk);
+        self.config.psk_identity = Some(psk_identity);
         self
     }
 
@@ -373,6 +389,9 @@ impl Default for TlsConfig {
             root_certs: RootCerts::WebPki,
             use_sni: true,
             disable_verification: false,
+            psk: None,
+            psk_identity: None,
+
             #[cfg(feature = "_rustls")]
             rustls_crypto_provider: None,
         }
@@ -398,6 +417,7 @@ impl Hash for TlsConfig {
         self.root_certs.hash(state);
         self.use_sni.hash(state);
         self.disable_verification.hash(state);
+        self.psk_identity.hash(state);
 
         #[cfg(feature = "_rustls")]
         if let Some(arc) = &self.rustls_crypto_provider {

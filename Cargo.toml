@@ -24,6 +24,7 @@ default = ["rustls", "gzip"]
 
 rustls = ["rustls-no-provider", "_ring", "rustls-webpki-roots"]
 native-tls = ["native-tls-no-default", "dep:der", "_tls", "native-tls-webpki-roots"]
+
 platform-verifier = ["dep:rustls-platform-verifier"]
 socks-proxy = ["dep:socks"]
 win-system-proxy = ["dep:winreg"]
@@ -80,7 +81,7 @@ webpki-roots = { version = "1.0.0", optional = true, default-features = false }
 webpki-root-certs = { version = "1.0.0", optional = true, default-features = false }
 
 rustls = { version = "0.23.45", optional = true, default-features = false, features = ["logging", "std", "tls12"] }
-native-tls = { version = "0.2.14", optional = true, default-features = false }
+native-tls = { git = "https://github.com/wyv3rn/rust-native-tls", branch = "psk-support", optional = true, default-features = false}
 der = { version = "0.8.0", optional = true, default-features = false, features = ["pem", "std"] }
 
 socks = { version = "0.3.4", optional = true }
@@ -100,6 +101,7 @@ serde_json = { version = "1.0.120", optional = true, default-features = false, f
 
 mime_guess = { version = "2.0.5", optional = true }
 getrandom = { version = "0.4", optional = true }
+secstr = "0.4"
 
 [target.'cfg(windows)'.dependencies]
 winreg = { version = "0.56", optional = true }

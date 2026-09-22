@@ -10,6 +10,7 @@ use der::Document;
 use der::pem::LineEnding;
 use native_tls::{Certificate, HandshakeError, Identity, TlsConnector};
 use native_tls::{TlsConnectorBuilder, TlsStream};
+use secstr::SecStr;
 
 use super::TlsConfig;
 
@@ -195,6 +196,13 @@ fn build_connector(tls_config: &TlsConfig) -> Result<CachedNativeTlsConnector, E
 
     if !tls_config.use_sni {
         debug!("Disable SNI");
+    }
+
+    if let Some(psk_identity) = &tls_config.psk_identity {
+        builder.psk(
+            tls_config.psk.clone().unwrap_or_else(|| SecStr::from("")),
+            psk_identity,
+        );
     }
 
     let conn = builder.build()?;
